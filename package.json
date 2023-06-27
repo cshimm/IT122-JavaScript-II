@@ -1,0 +1,20 @@
+{
+  "name": "it122-javascript-ii",
+  "version": "1.0.0",
+  "description": "JavaScript II",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cshimm/IT122-JavaScript-II.git"
+  },
+  "author": "Cameron Shimmin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cshimm/IT122-JavaScript-II/issues"
+  },
+  "homepage": "https://github.com/cshimm/IT122-JavaScript-II#readme"
+}
