@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/cshimm/IT122-JavaScript-II/issues"
   },
-  "homepage": "https://github.com/cshimm/IT122-JavaScript-II#readme"
+  "homepage": "https://github.com/cshimm/IT122-JavaScript-II#readme",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2"
+  }
 }
