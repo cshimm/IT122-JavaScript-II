@@ -1,0 +1,36 @@
+/* Global */
+li {
+    font-style: italic;
+}
+h1 {
+    font-size: x-large;
+}
+
+/* Home page*/
+.game-link a {
+    text-decoration: none;
+}
+.game-link:hover {
+    text-decoration: underline;
+}
+.game-link {
+    list-style: square;
+}
+
+/* Details page*/
+.game-card {
+    text-align: center;
+    padding: 1em 2em;
+    border: solid 1px black;
+    width:15em;
+}
+.game-card li {
+    list-style: none;
+}
+.game-card h1 {
+    margin-top: 0;
+}
+.home-btn {
+    display: block;
+    margin-bottom: 1em;
+}

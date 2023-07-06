@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body style="margin: 1em 2em">
+        <h1>Classic  Video Games</h1>
+
+        <% games.forEach((game) => { %>
+            <li class="game-link">
+                <a href="/games/<%= game.title %>">
+                    <%= game.title %> (<%= game.yearReleased %>)
+                </a>
+            </li>
+        <% }); %>
+
+    </body>
+</html>

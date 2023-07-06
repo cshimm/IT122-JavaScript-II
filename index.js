@@ -1,22 +1,34 @@
-import http from "http";
+import express from 'express';
+import { getAll, getItem } from "./data.js"
 
-http.createServer((req,res) => {
-    const path = req.url.toLowerCase();
-    const home = 'Welcome to my Home Page!'
-    const about = 'Hi my name is Cameron and I am a Software Development student at Seattle Central College.'
-    const notFound = '404 - Not found.'
-    switch(path) {
-        case '/':
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(home);
-            break;
-        case '/about':
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(about);
-            break;
-        default:
-            res.writeHead(404, {'Content-Type': 'text/plain'});
-            res.end(notFound);
-            break;
+const app = express();
+app.set('port', process.env.PORT || 3000);
+app.use(express.static('./public')); // set location for static files
+app.set('view engine', 'ejs')
+const games = getAll();
+
+app.get('/', (req,res) => {
+    console.log(req.url);
+    res.render('home', { games } );
+});
+
+app.get('/games/:title', (req, res) => {
+    let game = getItem(req.params.title);
+    if (game) {
+        res.render('detail', { game })
     }
-}).listen(process.env.PORT || 3000);
+});
+app.get('/about', (req,res) => {
+    res.type('text/html');
+    res.send('About page');
+});
+
+app.use((req,res) => {
+    res.type('text/plain');
+    res.status(404);
+    res.send('404 - Not found');
+});
+
+app.listen(app.get('port'), () => {
+    console.log('Express started');
+});
