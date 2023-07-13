@@ -5,7 +5,6 @@ function game (title, genre, yearReleased, studio, platform) {
         genre,
         yearReleased,
         studio,
-        platform
     };
 }
 let simCity = new game("SimCity", "Simulation", "1989", "Maxis");

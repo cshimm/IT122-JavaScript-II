@@ -5,16 +5,42 @@ li {
 h1 {
     font-size: x-large;
 }
+body{
+    margin: 1em 2em;
+}
+a:hover {
+    text-decoration: underline;
+}
 
 /* Home page*/
+.games {
+    width: fit-content;
+}
 .game-link a {
+    width: fit-content;
     text-decoration: none;
 }
-.game-link:hover {
+.game-link a:hover {
     text-decoration: underline;
 }
 .game-link {
     list-style: square;
+}
+
+.game {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.delete-btn {
+    margin-left: 1em;
+    text-decoration: none;
+    width: fit-content;
+    display: block;
+}
+
+.delete-btn:hover {
+    color: red;
 }
 
 /* Details page*/
