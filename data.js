@@ -1,20 +1,11 @@
 
-function game (title, genre, yearReleased, studio, platform) {
-    return {
-        title,
-        genre,
-        yearReleased,
-        studio,
-    };
-}
-let simCity = new game("SimCity", "Simulation", "1989", "Maxis");
-let gta = new game("Grand Theft Auto", "Action-Adventure", "1997", "Rockstar North");
-let halfLife = new game("Half-Life", "Shooter", "1998", "Valve Corporation");
-let deusEx = new game("Deus Ex", "Role Playing Game", "2001", "Ion Storm");
-let superMarioWorld = new game("Super Mario World", " 2D Platformer", "1990", "Nintendo");
-
-const games = [simCity, halfLife, gta, deusEx, superMarioWorld];
-
+const games = [
+    {title:"SimCity", genre:"Simulation",yearReleased: "1989", studio: "Maxis"},
+    {title:"Grand Theft Auto", genre:"Action-Adventure",yearReleased: "1997", studio: "Rockstar North"},
+    {title:"Half-Life", genre:"Shooter",yearReleased: "1998", studio: "Valve Corporation"},
+    {title:"Deus Ex", genre:"Role Playing Game",yearReleased: "2001", studio: "Ion Storm"},
+    {title:"Super Mario World", genre:"2D Platformer",yearReleased: "1990", studio: "Nintendo"},
+]
 const getAll = () => {
     return games;
 }
