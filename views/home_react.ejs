@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <title>Classic Games</title>
+        <link rel="stylesheet" href="/css/style.css">
+
+        <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+        <!-- Don't use this in production: -->
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/babel">
+            const games = <%- games %>;
+            const App = () => {
+                const listItems = games.map((game) =>
+                    <li className="game" key={game.title}>
+                    <a className="game-link" href={'/games/' + game.title}>
+                        {`${game.title}  (${game.yearReleased})`}
+                    </a>
+                    <a className="delete-btn" href={'/delete/' + game.title}>x</a>
+                </li>);
+
+                return <div>
+                    <h2>Classic Games</h2>
+                        <ul className="games"> {listItems} </ul>
+                </div>;
+            };
+
+            ReactDOM.render(<App />, document.getElementById('root'));
+        </script>
+    </body>
+</html>

@@ -15,12 +15,13 @@ a:hover {
 /* Home page*/
 .games {
     width: fit-content;
+    padding: 0;
 }
-.game-link a {
+.game-link {
     width: fit-content;
     text-decoration: none;
 }
-.game-link a:hover {
+.game-link:hover {
     text-decoration: underline;
 }
 .game-link {

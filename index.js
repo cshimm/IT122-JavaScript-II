@@ -70,6 +70,6 @@ app.listen(app.get('port'), () => {
 const renderHomeGamesList = (res) => {
     Game.find({}).lean()
         .then((games) => {
-            res.render('home', { games });
+            res.render('home_react', { games: JSON.stringify(games) });
         }).catch(err => console.log(err));
 }
