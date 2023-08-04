@@ -20,9 +20,11 @@ a:hover {
 .game-link {
     width: fit-content;
     text-decoration: none;
+    color: blue;
 }
 .game-link:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 .game-link {
     list-style: square;
