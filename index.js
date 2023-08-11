@@ -21,12 +21,26 @@ app.get('/api/games/:title', (req, res) => {
             res.json(game);
         }).catch(err => res.status(500).send('Database Error occurred'));
 });
-app.post('/api/games/update/:title', (req, res) => {
-    const newGame = { title:'updated', yearReleased: '9999', genre:'updateGenre', studio:'updateStudio' }
-    Game.updateOne({ title: req.params.title }, newGame, { upsert:true }).lean()
-        .then((game) => {
-            res.json(game);
-        }).catch(err => res.status(500).send('Database Error occurred'));
+app.post('/api/games/update/:title',async (req, res) => {
+    const updatedGame = req.body;
+    if (Object.values(updatedGame).every(val => val === '')) {
+        const newGame = {
+            title: 'Title',
+            yearReleased: 'Year Released',
+            genre: 'Genre',
+            studio: 'Studio'
+        }
+        try {
+            await Game.create(newGame);
+        } catch (e) {
+            res.status(500).send('Database error occurred');
+        }
+    } else{
+        Game.updateOne({ title: req.params.title }, updatedGame, { upsert:true }).lean()
+            .then((game) => {
+                res.json(game);
+            }).catch(err => res.status(500).send('Database Error occurred'));
+    }
 })
 app.delete('/api/games/delete/:title', (req, res) => {
     Game.deleteOne({title: req.params.title}).lean()
@@ -48,7 +62,6 @@ app.get('/games/:title', (req, res) => {
 app.get('/delete/:title', (req, res) => {
     Game.deleteOne( {title: req.params.title }).lean()
         .then(() => {
-            console.log("delete successful")
             renderHomeGamesList(res);
         });
 });
@@ -70,6 +83,6 @@ app.listen(app.get('port'), () => {
 const renderHomeGamesList = (res) => {
     Game.find({}).lean()
         .then((games) => {
-            res.render('home_react', { games: JSON.stringify(games) });
+            res.render('home_react');
         }).catch(err => console.log(err));
 }

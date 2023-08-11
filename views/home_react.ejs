@@ -12,12 +12,20 @@
     <body>
         <div id="root"></div>
         <script type="text/babel">
-            const games = <%- games %>;
             const App = () => {
-                const [selectedGame, setSelectedGame] = React.useState();
+                const [selectedGame, setSelectedGame] = React.useState(null);
                 const [isEditingDetail, setIsEditingDetail] = React.useState(false);
-                const [gamesList, setGamesList] = React.useState(games);
+                const [gamesList, setGamesList] = React.useState();
+                React.useEffect(() => {
+                    fetchAllGames();
+                }, []);
 
+                const fetchAllGames = async () => {
+                    fetch("/api/games").then(res => res.json())
+                        .then((json) => {
+                            setGamesList(json)
+                        });
+                }
                 const ListItems = (props) => {
                     const listItemClicked = (e) => {
                         let game = gamesList.find((g) => {
@@ -31,7 +39,6 @@
                         <a className="game-link" onClick={listItemClicked}>
                             {`${g.title}  (${g.yearReleased})`}
                         </a>
-                        <a className="delete-btn" href={'/delete/' + g.title}>x</a>
                     </li>);
                         return <ul className="games"> {listItems} </ul>
                 };
@@ -40,7 +47,7 @@
                     return <form>
                         <label>
                             <input
-                                type="text" name={props.target} placeholder={props.title} onChange={props.itemChanged} />
+                                type="text" name={props.target} placeholder={props.label} onChange={props.itemChanged} />
                         </label>
                     </form>;
                 }
@@ -53,6 +60,7 @@
                         <br/>
                         <EditButton isEditing={isEditingDetail} />
                         <ClearButton />
+                        <DeleteButton />
                     </div>;
                 }
                 const ClearButton = () => {
@@ -61,26 +69,51 @@
                     }
                     return <button onClick={clearItems}>Clear</button>;
                 }
+                const DeleteButton = () => {
+                    const fetchData = async () => {
+                        fetch(`api/games/delete/${selectedGame.title}`, {method: 'DELETE'})
+                            .then(res => res.json())
+                            .then(() => {
+                                fetchAllGames()
+                                setSelectedGame(null);
+                            });
+                    }
+                    return <button onClick={fetchData}>Delete</button>;
+                }
                 const EditButton = (props) => {
-                    const isValidEdit = () => {
-                        const game = props.newGame;
-                        return game.title !== '' &&
-                            game.genre !== '' &&
-                            game.studio !== '' &&
-                            game.yearReleased !== '';
+                    const updateGame = async (game) => {
+                        fetch(`api/games/update/${selectedGame.title}`, {
+                            method: 'POST',
+                            headers : {'Content-Type': 'application/json'},
+                            body: JSON.stringify(game)
+                        })
+                            .then(res => res.json())
+                    }
+                    const handleUpdate = () => {
+                        const updatedGamesList = [...gamesList]
+                        const allFieldsBlank = Object.values(props.newGame).every(val => val === '');
+                        if (allFieldsBlank) {
+                            const newGame = {
+                                title: 'Title',
+                                yearReleased: 'Year Released',
+                                genre: 'Genre',
+                                studio: 'Studio'
+                            }
+                            updatedGamesList.push(newGame);
+                            setSelectedGame(newGame);
+                        }
+                        else {
+                            updatedGamesList[updatedGamesList.indexOf(selectedGame)] = props.newGame;
+                            setSelectedGame(props.newGame);
+                        }
+                        updateGame(props.newGame)
+                        setGamesList(updatedGamesList);
                     }
                     const editItems = () => {
                         setIsEditingDetail(!isEditingDetail);
                         if (isEditingDetail) {
-                            if (isValidEdit()) {
-                                // This line gets called when "save" is clicked
-                                gamesList[gamesList.indexOf(selectedGame)] = props.newGame;
-                                setGamesList(gamesList);
-                                setSelectedGame(props.newGame);
-                            } else {
-                                setIsEditingDetail(true);
-                                alert("Fields cannot be empty!");
-                            }
+                             // This line gets called when "save" is clicked
+                            handleUpdate();
                         }
                     }
                     return <button onClick={editItems}>{props.isEditing ? "Save" : "Edit"}</button>;
@@ -100,18 +133,22 @@
                     }
                     return <div>
                         <h2>Details about {props.selectedGame.title}: </h2>
-                        <div>Title:  <EditForm title={props.selectedGame.title} itemChanged={itemChanged} target="title" /></div>
-                        <div>Studio:  <EditForm title={props.selectedGame.studio} itemChanged={itemChanged} target="studio" /></div>
-                        <div>Genre:  <EditForm title={props.selectedGame.genre} itemChanged={itemChanged} target="genre" /></div>
-                        <div>Year released: <EditForm title={props.selectedGame.yearReleased} itemChanged={itemChanged} target="yearReleased" /></div>
+                        <div>Title:  <EditForm label={props.selectedGame.title} itemChanged={itemChanged} target="title" /></div>
+                        <div>Studio:  <EditForm label={props.selectedGame.studio} itemChanged={itemChanged} target="studio" /></div>
+                        <div>Genre:  <EditForm label={props.selectedGame.genre} itemChanged={itemChanged} target="genre" /></div>
+                        <div>Year released: <EditForm label={props.selectedGame.yearReleased} itemChanged={itemChanged} target="yearReleased" /></div>
                         <br/>
                         <EditButton newGame={newGame} isEditing={isEditingDetail} />
                         <ClearButton />
+                        <DeleteButton />
                     </div>
                 }
                 return <div>
                     <h2>Classic Games</h2>
-                    <ListItems games={gamesList} />
+                    {
+                        gamesList &&
+                        <ListItems games={gamesList} />
+                    }
                     <hr/>
                     { selectedGame && (
                         isEditingDetail ? <EditDetails selectedGame={selectedGame} /> : <Details selectedGame={selectedGame} isEditing={isEditingDetail} />
